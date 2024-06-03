@@ -1,0 +1,10 @@
+.venv
+.idea
+.env.local
+
+storage/*
+!storage/.gitkeep
+logs/*
+!logs/.gitkeep
+dags/__pycache__
+

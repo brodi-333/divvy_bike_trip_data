@@ -1,0 +1,4 @@
+astronomer-cosmos
+apache-airflow-providers-snowflake
+apache-airflow-providers-postgres:5.11.0
+pandas
