@@ -1,0 +1,3 @@
+INSERT INTO public.core_user (id, email,first_name,last_name,"password",password_salt,date_joined,last_login,is_superuser,is_active,reset_token,reset_triggered,is_qbnewb,login_attributes,updated_at,sso_source,locale,is_datasetnewb,settings,"type") VALUES
+	 (1, 'admin@admin.com','Admin','Admin','$2a$10$5Yj11JM3X2BJ0kpkaS.9xOqEnPNTYZQ7UHb.KjkiPOtt9gZmsZJFa','fdfa67dd-4895-4034-8bf5-bc544797a28c','2024-05-24 12:05:13.017746+02','2024-05-24 12:05:13.369771+02',true,true,NULL,NULL,true,NULL,'2024-05-24 12:05:13.369771+02',NULL,NULL,true,'{"last-acknowledged-version":"v0.49.3"}','personal')
+	 ON CONFLICT ("id") DO NOTHING;

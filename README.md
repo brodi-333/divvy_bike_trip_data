@@ -19,10 +19,13 @@ AIRFLOW_IMAGE_NAME=airflow_divvy:latest
 ## Services
 
 Airflow:
-[http://localhost:8080]()
+[http://127.0.0.222:8080]()
 
 Metabase:
 [http://127.0.0.223:3030]()
+
+DBT documentation:
+[http://127.0.0.224:8080]()
 
 Airflow & DWH database:
 127.0.0.222:5432
