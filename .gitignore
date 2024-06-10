@@ -4,6 +4,10 @@
 
 storage/*
 !storage/.gitkeep
+storage/zip/*
+!storage/zip/.gitkeep
+storage/extracted/*
+!storage/extracted/.gitkeep
 logs/*
 !logs/.gitkeep
 dags/__pycache__

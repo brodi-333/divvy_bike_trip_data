@@ -1,6 +1,8 @@
 import os
 
 import requests
+import zipfile
+from pathlib import Path
 from bs4 import BeautifulSoup
 
 
@@ -40,3 +42,21 @@ def check_file_exists(path: str) -> bool:
 def print_list(items: list) -> None:
     for item in items:
         print(item)
+
+
+def unzip_file_if_destination_not_exists(file_path: str, extract_to_base_dir: str) -> str:
+    file_name = os.path.basename(file_path)
+    destination_dir = f"{extract_to_base_dir}/{file_name.replace('.', '_')}"
+
+    if check_file_exists(destination_dir):
+        return destination_dir
+
+    with zipfile.ZipFile(file_path, "r") as zip_ref:
+        zip_ref.extractall(destination_dir)
+
+    return destination_dir
+
+
+def list_files_in_directory(dir_path: str, file_mask: str = "*") -> list[str]:
+    path = Path(dir_path)
+    return [str(file) for file in path.glob(file_mask) if file.is_file()]
