@@ -55,3 +55,11 @@ def list_files_in_directory_task(dir_path: str, file_mask: str = "*") -> list[st
 @task
 def merge_lists_task(lists: list) -> list:
     return reduce(lambda x, y: x + y, lists)
+
+
+@task(map_index_template="{{ map_index }}")
+def load_csv_to_postgres_task(csv_file_path, postgres_conn_id, target_table) -> None:
+    context = get_current_context()
+    context["map_index"] = "csv_file_path=" + csv_file_path
+
+    load_csv_to_postgres(csv_file_path, postgres_conn_id, target_table)

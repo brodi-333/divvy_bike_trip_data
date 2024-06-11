@@ -4,6 +4,9 @@ import requests
 import zipfile
 from pathlib import Path
 from bs4 import BeautifulSoup
+from sqlalchemy.dialects.postgresql import insert
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+import pandas as pd
 
 
 def fetch_page_content(url: str) -> str:
@@ -60,3 +63,17 @@ def unzip_file_if_destination_not_exists(file_path: str, extract_to_base_dir: st
 def list_files_in_directory(dir_path: str, file_mask: str = "*") -> list[str]:
     path = Path(dir_path)
     return [str(file) for file in path.glob(file_mask) if file.is_file()]
+
+
+def insert_on_duplicate(table, conn, keys, data_iter):
+    insert_stmt = insert(table.table).values(list(data_iter))
+    on_conflict_do_nothing_stmt = insert_stmt.on_conflict_do_nothing()
+    conn.execute(on_conflict_do_nothing_stmt)
+
+
+def load_csv_to_postgres(csv_file_path, postgres_conn_id, target_table):
+    df = pd.read_csv(csv_file_path)
+
+    postgres_hook = PostgresHook(postgres_conn_id=postgres_conn_id)
+    engine = postgres_hook.get_sqlalchemy_engine()
+    df.to_sql(target_table, engine, if_exists='append', index=False, chunksize=4096, method=insert_on_duplicate)

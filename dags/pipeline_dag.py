@@ -1,5 +1,6 @@
 from datetime import timedelta
-from airflow.decorators import dag, task
+from airflow.decorators import dag
+from airflow.providers.postgres.operators.postgres import PostgresOperator
 
 import pendulum
 from include.tasks import (
@@ -8,7 +9,8 @@ from include.tasks import (
     synchronize_file_task,
     extract_file_task,
     list_files_in_directory_task,
-    merge_lists_task
+    merge_lists_task,
+    load_csv_to_postgres_task
 )
 
 default_args = {
@@ -30,6 +32,8 @@ def pipeline_dag():
     bucket_url = "https://divvy-tripdata.s3.amazonaws.com"
     zip_local_dir = "/opt/airflow/storage/zip"
     extracted_local_dir = "/opt/airflow/storage/extracted"
+    postgres_conn_id = "postgres_dwh_staging"
+    postgres_target_table = "raw_rides"
 
     zip_files = fetch_and_parse_zip_file_names_task(bucket_url)
     print_list_task.override(task_id="print_remote_zip_files")(zip_files)
@@ -52,6 +56,33 @@ def pipeline_dag():
 
     merged_csv_file_list = merge_lists_task(csv_file_lists)
     print_list_task.override(task_id="print_merged_csv_file_list")(merged_csv_file_list)
+
+    create_stage_table_task = PostgresOperator(
+        task_id="create_raw_rides_table_task",
+        postgres_conn_id=postgres_conn_id,
+        sql="""
+            CREATE TABLE IF NOT EXISTS raw_rides (
+                ride_id VARCHAR PRIMARY KEY,
+                rideable_type VARCHAR,
+                started_at VARCHAR,
+                ended_at VARCHAR,
+                start_station_name VARCHAR,
+                start_station_id VARCHAR,
+                end_station_name VARCHAR,
+                end_station_id VARCHAR,
+                start_lat VARCHAR,
+                start_lng VARCHAR,
+                end_lat VARCHAR,
+                end_lng VARCHAR,
+                member_casual VARCHAR
+            );
+            """,
+    )
+
+    create_stage_table_task >> \
+        load_csv_to_postgres_task \
+        .partial(postgres_conn_id=postgres_conn_id, target_table=postgres_target_table) \
+        .expand(csv_file_path=merged_csv_file_list)
 
 
 pipeline_dag()
