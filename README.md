@@ -1,7 +1,17 @@
 # divvy_bike_trip_data
 
+The purpose of the project is to gather, transform and visualize historical trip data of Divvy Chicagoland's bike share 
+system (https://divvybikes.com) that is available to the public at:
+https://divvybikes.com/system-data
+and more precisely, in the bucket:
+https://divvy-tripdata.s3.amazonaws.com/index.html
 
-Init:
+This project could be the base for getting insights about bike trips: their durations, start and end locations, 
+distribution of rides over months, days of week, time of day, etc.
+
+## Init
+
+In order to run project execute command:
 ```
 docker compose up
 ```

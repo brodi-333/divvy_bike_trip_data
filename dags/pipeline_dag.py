@@ -35,6 +35,22 @@ def pipeline_dag():
     postgres_conn_id = "postgres_dwh_staging"
     postgres_target_table = "raw_rides"
 
+    required_columns = [
+        "ride_id",
+        "rideable_type",
+        "started_at",
+        "ended_at",
+        "start_station_name",
+        "start_station_id",
+        "end_station_name",
+        "end_station_id",
+        "start_lat",
+        "start_lng",
+        "end_lat",
+        "end_lng",
+        "member_casual",
+    ]
+
     zip_files = fetch_and_parse_zip_file_names_task(bucket_url)
     print_list_task.override(task_id="print_remote_zip_files")(zip_files)
 
@@ -81,7 +97,11 @@ def pipeline_dag():
 
     create_stage_table_task >> \
         load_csv_to_postgres_task \
-        .partial(postgres_conn_id=postgres_conn_id, target_table=postgres_target_table) \
+        .override(trigger_rule="all_done") \
+        .partial(
+            postgres_conn_id=postgres_conn_id,
+            target_table=postgres_target_table,
+            required_columns=required_columns) \
         .expand(csv_file_path=merged_csv_file_list)
 
 

@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 from sqlalchemy.dialects.postgresql import insert
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 import pandas as pd
+from airflow.exceptions import AirflowSkipException
 
 
 def fetch_page_content(url: str) -> str:
@@ -71,8 +72,21 @@ def insert_on_duplicate(table, conn, keys, data_iter):
     conn.execute(on_conflict_do_nothing_stmt)
 
 
-def load_csv_to_postgres(csv_file_path, postgres_conn_id, target_table):
+def are_required_columns_present(df: pd.DataFrame, required_columns: list[str]) -> bool:
+    df_columns = df.columns.tolist()
+    missing_columns = [col for col in required_columns if col not in df_columns]
+    if missing_columns:
+        return False
+    return True
+
+
+def load_csv_to_postgres(csv_file_path, postgres_conn_id, target_table, required_columns):
     df = pd.read_csv(csv_file_path)
+
+    if not are_required_columns_present(df, required_columns):
+        raise AirflowSkipException(f"File {csv_file_path} does not contain required columns")
+
+    df = df[required_columns]
 
     postgres_hook = PostgresHook(postgres_conn_id=postgres_conn_id)
     engine = postgres_hook.get_sqlalchemy_engine()

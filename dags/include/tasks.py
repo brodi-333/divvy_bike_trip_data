@@ -58,8 +58,8 @@ def merge_lists_task(lists: list) -> list:
 
 
 @task(map_index_template="{{ map_index }}")
-def load_csv_to_postgres_task(csv_file_path, postgres_conn_id, target_table) -> None:
+def load_csv_to_postgres_task(csv_file_path, postgres_conn_id, target_table, required_columns) -> None:
     context = get_current_context()
     context["map_index"] = "csv_file_path=" + csv_file_path
 
-    load_csv_to_postgres(csv_file_path, postgres_conn_id, target_table)
+    load_csv_to_postgres(csv_file_path, postgres_conn_id, target_table, required_columns)
