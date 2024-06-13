@@ -101,7 +101,7 @@ x-airflow-common:
     AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: 'true'
     # WARNING: Use _PIP_ADDITIONAL_REQUIREMENTS option ONLY for a quick checks
     # for other purpose (development, test and especially production usage) build/extend Airflow image.
-    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- apache-airflow-providers-postgres pandas beautifulsoup4}
+    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- apache-airflow-providers-postgres pandas beautifulsoup4 astronomer-cosmos}
     # The following line can be used to set a custom config file, stored in the local config folder
     # If you want to use it, outcomment it and replace airflow.cfg with the name of your config file
     # AIRFLOW_CONFIG: '/opt/airflow/config/airflow.cfg'
@@ -111,6 +111,7 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
     - ${AIRFLOW_PROJ_DIR:-.}/dbt:/opt/airflow/dbt
+    - ${AIRFLOW_PROJ_DIR:-.}/dbt_venv:/opt/airflow/dbt_venv
     - ${AIRFLOW_PROJ_DIR:-.}/storage:/opt/airflow/storage
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
@@ -170,6 +171,8 @@ services:
         else
           echo "SKIPPING INITIALIZATION"
         fi
+
+
 
   metabase_app:
     <<: *metabase-common
@@ -374,6 +377,17 @@ services:
         fi
         mkdir -p /sources/logs /sources/dags /sources/plugins
         chown -R "${AIRFLOW_UID}:0" /sources/{logs,dags,plugins}
+        cd /sources
+        if [[ ! -d "dbt_venv" ]]; then
+          apt-get update
+          apt-get install -y libpq-dev
+          apt-get install -y build-essential python3-dev gcc musl-dev
+          python -m venv dbt_venv && source dbt_venv/bin/activate && \
+            pip install --no-cache-dir psycopg2-binary dbt-postgres && deactivate
+          apt-get remove --purge -y build-essential python3-dev gcc musl-dev
+          apt-get autoremove -y
+          chown -R "${AIRFLOW_UID}:0" dbt_venv
+        fi
         exec /entrypoint airflow version
     # yamllint enable rule:line-length
     environment:
