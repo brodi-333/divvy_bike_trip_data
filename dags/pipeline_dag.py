@@ -1,6 +1,7 @@
 from datetime import timedelta
 from airflow.decorators import dag
 from airflow.providers.postgres.operators.postgres import PostgresOperator
+from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 
 import pendulum
 from include.tasks import (
@@ -95,14 +96,24 @@ def pipeline_dag():
             """,
     )
 
+    trigger_dbt_run = TriggerDagRunOperator(
+        task_id="trigger_dbt_run",
+        trigger_dag_id="dbt_dag",
+        wait_for_completion=False,
+        trigger_rule="all_done"
+    )
+
     create_stage_table_task >> \
         load_csv_to_postgres_task \
-        .override(trigger_rule="all_done") \
+        .override(
+            trigger_rule="all_done",
+            max_active_tis_per_dag=1) \
         .partial(
             postgres_conn_id=postgres_conn_id,
             target_table=postgres_target_table,
             required_columns=required_columns) \
-        .expand(csv_file_path=merged_csv_file_list)
+        .expand(csv_file_path=merged_csv_file_list) >> \
+        trigger_dbt_run
 
 
 pipeline_dag()

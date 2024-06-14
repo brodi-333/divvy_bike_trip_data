@@ -1,0 +1,59 @@
+version: 2
+
+sources:
+  - name: raw_layer
+    meta:
+      external_location: https://divvy-tripdata.s3.amazonaws.com/index.html
+    description: Data from S3 bucket, brought in by EL process
+    database: airflow
+    schema: dwh_staging
+    tables:
+      - name: raw_rides
+        description: "List of rides"
+        tags: [raw_layer]
+        columns:
+          - name: ride_id
+            description: "Trip unique identifier"
+            data_tests:
+              - unique
+              - not_null
+          - name: rideable_type
+            description: "Vehicle type"
+            data_tests:
+              - not_null
+              - accepted_values:
+                  values: ['classic_bike', 'docked_bike', 'electric_bike']
+          - name: started_at
+            description: "Trip start time"
+            data_tests:
+              - not_null
+          - name: ended_at
+            description: "Trip end time"
+            data_tests:
+              - not_null
+          - name: start_station_name
+            description: "Start station - name"
+          - name: start_station_id
+            description: "Start station - identifier"
+          - name: end_station_name
+            description: "End station - name"
+          - name: end_station_id
+            description: "End station - identifier"
+          - name: start_lat
+            description: "Start latitude"
+            data_tests:
+              - not_null
+          - name: start_lng
+            description: "Start longitude"
+            data_tests:
+              - not_null
+          - name: end_lat
+            description: "End latitude"
+          - name: end_lng
+            description: "End longitude"
+          - name: member_casual
+            description: "Rider type (Member, Single Ride, and Day Pass)"
+            data_tests:
+              - not_null
+              - accepted_values:
+                  values: ['member', 'casual', 'day_pass']
