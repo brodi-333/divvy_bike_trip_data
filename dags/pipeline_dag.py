@@ -99,7 +99,7 @@ def pipeline_dag():
     trigger_dbt_run = TriggerDagRunOperator(
         task_id="trigger_dbt_run",
         trigger_dag_id="dbt_dag",
-        wait_for_completion=False,
+        wait_for_completion=True,
         trigger_rule="all_done"
     )
 

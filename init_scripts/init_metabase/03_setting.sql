@@ -8,6 +8,8 @@ INSERT INTO public.setting ("key",value) VALUES
 	 ('site-name','Example company'),
 	 ('admin-email','admin@admin.com'),
 	 ('site-locale','en'),
+	 ('custom-homepage-dashboard','1'),
+	 ('custom-homepage','true'),
 	 ('anon-tracking-enabled','false')
 	 ON CONFLICT ("key") DO NOTHING;
 INSERT INTO public.setting ("key",value) VALUES
