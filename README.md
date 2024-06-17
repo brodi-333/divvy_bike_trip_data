@@ -6,8 +6,40 @@ https://divvybikes.com/system-data
 and more precisely, in the bucket:  
 https://divvy-tripdata.s3.amazonaws.com/index.html
 
-This project could be the base for getting insights about bike trips: their durations, start and end locations, 
+This project can be the starting point for getting insights about bike trips: their durations, start and end locations, 
 distribution of rides over months, days of week, time of day, etc.
+
+## Technology stack and features
+
+- ⚡ Apache Airflow as a job orchestrator
+- 💾 PostgreSQL as the SQL database
+- 🗂️ DBT for transformation of data
+- ✅ Model tests with DBT
+- 🖥️ Nginx for serving DBT documentation
+- 📊 Charts and data analysis with Metabase
+- 🐋 Docker Compose for development
+
+### Airflow - DAG list
+
+[![Airflow - DAG list](img/airflow_dags.png)](https://github.com/brodi-333/divvy_bike_trip_data)
+
+### Airflow - pipeline DAG
+
+[![Airflow - pipeline DAG](img/airflow_pipeline_dag.png)](https://github.com/brodi-333/divvy_bike_trip_data)
+
+### Airflow - dbt DAG
+
+[![Airflow - dbt DAG](img/airflow_dbt_dag.png)](https://github.com/brodi-333/divvy_bike_trip_data)
+
+### Metabase - number of rides dashboard
+
+[![Metabase - number of rides dashboard](img/metabase_number_of_rides.png)](https://github.com/brodi-333/divvy_bike_trip_data)
+
+### Metabase - number of rides on map
+
+[![Metabase - number of rides on map](img/metabase_on_map.png)](https://github.com/brodi-333/divvy_bike_trip_data)
+
+## How to use it
 
 ## Init
 
@@ -51,20 +83,4 @@ User: metabase
 Db: metabase  
 Pass: metabase  
 
-## Technology stack and features
 
-- ⚡ Apache Airflow as a job orchestrator
-- 💾 PostgreSQL as the SQL database
-- 🗂️ DBT for transformation of data
-- ✅ Model tests with DBT
-- 🖥️ Nginx for serving DBT documentation
-- 📊 Charts and data analysis with Metabase
-- 🐋 Docker Compose for development
-
-## How to use it
-
-## Airflow
-
-### DAG list
-
-[![Airflow DAG list](img/airflow_dags.png)](https://github.com/brodi-333/divvy_bike_trip_data)

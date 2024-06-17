@@ -24,6 +24,8 @@ render_config = RenderConfig(
 )
 
 dbt_dag = DbtDag(
+    dag_id="dbt_dag",
+    description="Executes dbt run and dbt test on models",
     project_config=ProjectConfig(f"{os.environ['AIRFLOW_HOME']}/dbt"),
     operator_args={"install_deps": False},
     profile_config=profile_config,
@@ -33,5 +35,5 @@ dbt_dag = DbtDag(
     schedule_interval=None,
     start_date=datetime(2024, 1, 1),
     catchup=False,
-    dag_id="dbt_dag",
+    tags=["divvy"],
 )

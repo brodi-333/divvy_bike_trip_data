@@ -1,6 +1,80 @@
 version: 2
 
 models:
+  - name: fct_rides
+    description: "Summary of rides"
+    columns:
+      - name: ride_id
+        description: "Unique identifier for each ride"
+        tests:
+          - not_null
+          - unique
+      - name: rideable_type_fk
+        description: "Foreign key to the rideable type dimension"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_rideable_type')
+              field: id
+      - name: started_at_date_fk
+        description: "Foreign key to the date dimension representing the start date of the ride"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_date')
+              field: id
+      - name: ended_at_date_fk
+        description: "Foreign key to the date dimension representing the end date of the ride"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_date')
+              field: id
+      - name: started_at_time_of_day_fk
+        description: "Foreign key to the date dimension time of day"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_time_of_day')
+              field: time_of_day_hour
+      - name: ended_at_time_of_day_fk
+        description: "Foreign key to the date dimension time of day"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_time_of_day')
+              field: time_of_day_hour
+      - name: start_station_fk
+        description: "Foreign key to the stations dimension representing starting station"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_station')
+              field: station_pk
+      - name: end_station_fk
+        description: "Foreign key to the stations dimension representing end station"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_station')
+              field: station_pk
+  - name: dim_station
+    description: "Stations dimension table"
+    columns:
+      - name: station_pk
+        description: "Station's surrogate key"
+        tests:
+          - not_null
+          - unique
+      - name: id
+        description: "Natural key of station"
+        tests:
+          - not_null
+          - unique
+      - name: name
+        description: "Name of station"
+        tests:
+          - not_null
   - name: dim_rideable_type
     description: "Rideable types dimension table"
     columns:
