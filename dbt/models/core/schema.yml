@@ -31,14 +31,14 @@ models:
               to: ref('dim_date')
               field: id
       - name: started_at_time_of_day_fk
-        description: "Foreign key to the date dimension time of day"
+        description: "Foreign key to the time of day dimension representing start time of ride"
         tests:
           - not_null
           - relationships:
               to: ref('dim_time_of_day')
               field: time_of_day_hour
       - name: ended_at_time_of_day_fk
-        description: "Foreign key to the date dimension time of day"
+        description: "Foreign key to the time of day dimension representing end time of ride"
         tests:
           - not_null
           - relationships:
@@ -58,6 +58,25 @@ models:
           - relationships:
               to: ref('dim_station')
               field: station_pk
+      - name: start_lat
+        description: "Latitude of starting location"
+        tests:
+          - not_null
+      - name: start_lng
+        description: "Longitude of starting location"
+        tests:
+          - not_null
+      - name: end_lat
+        description: "Latitude of starting location"
+      - name: end_lng
+        description: "Longitude of starting location"
+      - name: rent_type_fk
+        description: "Foreign key to the rent type dimension"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_rent_type')
+              field: id
   - name: dim_station
     description: "Stations dimension table"
     columns:
@@ -80,8 +99,27 @@ models:
     columns:
       - name: id
         description: "Unique identifier"
+        tests:
+          - not_null
+          - unique
       - name: name
         description: "Name of the rideable type"
+        tests:
+          - not_null
+  - name: dim_rent_type
+    description: "Type of rent"
+    columns:
+      - name: id
+        description: "Unique identifier"
+        tests:
+          - not_null
+          - unique
+      - name: name
+        description: "Name of the rent type"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['member', 'casual', 'day_pass']
   - name: dim_time_of_day
     description: "Dimension table that categorizes hour into different time of day periods"
     columns:

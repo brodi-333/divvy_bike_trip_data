@@ -15,7 +15,8 @@ WITH rides AS (
         start_lat,
         start_lng,
         end_lat,
-        end_lng
+        end_lng,
+        member_casual
     FROM
         {{ ref('stg_rides') }}
 ),
@@ -42,6 +43,12 @@ stations AS (
         id,
         name
     FROM {{ ref('dim_station') }}
+),
+rent_types AS (
+    SELECT
+        id,
+        name
+    FROM {{ ref('dim_rent_type') }}
 )
 
 SELECT
@@ -56,7 +63,8 @@ SELECT
     r.start_lat,
     r.start_lng,
     r.end_lat,
-    r.end_lng
+    r.end_lng,
+    ret.id AS rent_type_fk
 FROM
     rides r
 LEFT JOIN rideable_types rt
@@ -73,3 +81,5 @@ LEFT JOIN stations ss
     ON r.start_station_id = ss.id
 LEFT JOIN stations es
     ON r.end_station_id = es.id
+LEFT JOIN rent_types ret
+    ON r.member_casual = ret.name

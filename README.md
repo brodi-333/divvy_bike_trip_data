@@ -31,17 +31,23 @@ distribution of rides over months, days of week, time of day, etc.
 
 [![Airflow - dbt DAG](img/airflow_dbt_dag.png)](https://github.com/brodi-333/divvy_bike_trip_data)
 
-### Metabase - number of rides dashboard
+### Metabase - dashboard
 
-[![Metabase - number of rides dashboard](img/metabase_number_of_rides.png)](https://github.com/brodi-333/divvy_bike_trip_data)
+[![Metabase - dashboard](img/metabase_number_of_rides.png)](https://github.com/brodi-333/divvy_bike_trip_data)
 
 ### Metabase - number of rides on map
 
 [![Metabase - number of rides on map](img/metabase_on_map.png)](https://github.com/brodi-333/divvy_bike_trip_data)
 
-## How to use it
+### dbt - project documentation
 
-## Init
+[![dbt - project documentation](img/dbt_docs.png)](https://github.com/brodi-333/divvy_bike_trip_data)
+
+### dbt - lineage graph
+
+[![dbt - lineage graph](img/dbt_lineage_graph.png)](https://github.com/brodi-333/divvy_bike_trip_data)
+
+## How to use it
 
 In order to run project execute command:
 ```
@@ -72,7 +78,7 @@ Login with: admin@admin.com / Admin333!
 [http://127.0.0.224:8080]()
 
 #### Airflow & DWH database
-127.0.0.222:5432
+127.0.0.222:5432  
 User: airflow  
 Db: airflow  
 Pass: airflow  
