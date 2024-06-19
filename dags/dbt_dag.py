@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 
 from cosmos import DbtDag, ProjectConfig, ProfileConfig, ExecutionConfig, RenderConfig
 from cosmos.profiles import PostgresUserPasswordProfileMapping
+from cosmos.constants import TestBehavior
 
 default_args = {
     "owner": "me",
@@ -20,7 +21,8 @@ profile_config = ProfileConfig(
 )
 
 render_config = RenderConfig(
-    emit_datasets=False
+    emit_datasets=False,
+    test_behavior=TestBehavior.AFTER_ALL,
 )
 
 dbt_dag = DbtDag(
