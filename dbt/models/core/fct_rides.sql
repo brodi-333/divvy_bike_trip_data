@@ -26,23 +26,41 @@ rideable_types AS (
         name
     FROM {{ ref('dim_rideable_type') }}
 ),
-dates AS (
+started_at_dates AS (
     SELECT
         id
-    FROM {{ ref('dim_date') }}
+    FROM {{ ref('dim_started_at_date') }}
 ),
-times AS (
+ended_at_dates AS (
+    SELECT
+        id
+    FROM {{ ref('dim_ended_at_date') }}
+),
+started_at_times AS (
     SELECT
         time_of_day_hour,
         time_of_day_label
-    FROM {{ ref('dim_time_of_day') }}
+    FROM {{ ref('dim_started_at_time_of_day') }}
 ),
-stations AS (
+ended_at_times AS (
+    SELECT
+        time_of_day_hour,
+        time_of_day_label
+    FROM {{ ref('dim_ended_at_time_of_day') }}
+),
+start_stations AS (
     SELECT
         station_pk,
         id,
         name
-    FROM {{ ref('dim_station') }}
+    FROM {{ ref('dim_start_station') }}
+),
+end_stations AS (
+    SELECT
+        station_pk,
+        id,
+        name
+    FROM {{ ref('dim_end_station') }}
 ),
 rent_types AS (
     SELECT
@@ -69,17 +87,17 @@ FROM
     rides r
 LEFT JOIN rideable_types rt
     ON r.rideable_type = rt.name
-LEFT JOIN dates started_at_date_d
+LEFT JOIN started_at_dates started_at_date_d
     ON r.started_at_date = started_at_date_d.id
-LEFT JOIN dates ended_at_date_d
+LEFT JOIN ended_at_dates ended_at_date_d
     ON r.ended_at_date = ended_at_date_d.id
-LEFT JOIN times started_at_time_d
+LEFT JOIN started_at_times started_at_time_d
     ON r.started_at_hour = started_at_time_d.time_of_day_hour
-LEFT JOIN times ended_at_time_d
+LEFT JOIN ended_at_times ended_at_time_d
     ON r.ended_at_hour = ended_at_time_d.time_of_day_hour
-LEFT JOIN stations ss
+LEFT JOIN start_stations ss
     ON r.start_station_id = ss.id
-LEFT JOIN stations es
+LEFT JOIN end_stations es
     ON r.end_station_id = es.id
 LEFT JOIN rent_types ret
     ON r.member_casual = ret.name
