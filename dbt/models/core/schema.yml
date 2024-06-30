@@ -139,6 +139,14 @@ models:
           - relationships:
               to: ref('dim_time_of_day')
               field: time_of_day_hour
+      - name: started_at_datetime
+        description: "Start date/time of trip"
+        tests:
+          - not_null
+      - name: ended_at_datetime
+        description: "End date/time of trip"
+        tests:
+          - not_null
       - name: start_station_fk
         description: "Foreign key to the stations dimension representing starting station"
         tests:
