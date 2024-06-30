@@ -147,6 +147,10 @@ models:
         description: "End date/time of trip"
         tests:
           - not_null
+      - name: duration_in_seconds
+        description: "Duration of trip in seconds"
+        tests:
+          - not_null
       - name: start_station_fk
         description: "Foreign key to the stations dimension representing starting station"
         tests:

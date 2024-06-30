@@ -80,6 +80,7 @@ SELECT
     ended_at_time_d.time_of_day_hour AS ended_at_time_of_day_fk,
     r.started_at AS started_at_datetime,
     r.ended_at AS ended_at_datetime,
+    {{ datediff("r.started_at", "r.ended_at", "second") }} AS duration_in_seconds,
     COALESCE(ss.station_pk, '-1') AS start_station_fk,
     COALESCE(es.station_pk, '-1') AS end_station_fk,
     r.start_lat,
