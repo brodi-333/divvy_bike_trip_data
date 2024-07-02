@@ -106,3 +106,4 @@ LEFT JOIN end_stations es
     ON r.end_station_id = es.id
 LEFT JOIN rent_types ret
     ON r.member_casual = ret.name
+WHERE r.ended_at > r.started_at
