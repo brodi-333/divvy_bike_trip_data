@@ -20,16 +20,21 @@ def print_list_task(items: list) -> None:
 
 
 @task(map_index_template="{{ map_index }}")
-def synchronize_file_task(file_name: str, base_url: str, local_dir: str) -> str:
+def synchronize_file_task(file_name: str, base_url: str, local_dir: str, extract_to_base_dir: str) -> str:
     context = get_current_context()
     context["map_index"] = "file_name=" + file_name
 
     uri = f"{base_url}/{file_name}"
     local_file_path = f"{local_dir}/{file_name}"
+    extracted_directory_name = get_directory_name_for_zip_file(local_file_path)
+    extracted_dir_path = f"{extract_to_base_dir}/{extracted_directory_name}"
 
     if check_file_exists(local_file_path):
         print(f"File {file_name} already exists")
         # todo raise AirflowSkipException(f"File {file_name} already exists")
+    elif check_file_exists(extracted_dir_path):
+        print(f"Directory {extracted_dir_path} already exists")
+        # todo raise AirflowSkipException(f"Directory {extracted_dir_path} already exists")
     else:
         download_file(uri, local_file_path)
 

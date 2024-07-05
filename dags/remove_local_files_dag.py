@@ -22,7 +22,7 @@ def remove_local_files_dag():
 
     delete_zip_task = BashOperator(
         task_id='delete_zip_task',
-        bash_command=f'rm -rf {zip_local_dir}/*',
+        bash_command=f'rm -rf {zip_local_dir}/*.zip',
     )
 
     delete_extracted_task = BashOperator(

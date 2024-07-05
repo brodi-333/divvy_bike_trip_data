@@ -49,8 +49,8 @@ def print_list(items: list) -> None:
 
 
 def unzip_file_if_destination_not_exists(file_path: str, extract_to_base_dir: str) -> str:
-    file_name = os.path.basename(file_path)
-    destination_dir = f"{extract_to_base_dir}/{file_name.replace('.', '_')}"
+    directory_name = get_directory_name_for_zip_file(file_path)
+    destination_dir = f"{extract_to_base_dir}/{directory_name}"
 
     if check_file_exists(destination_dir):
         return destination_dir
@@ -59,6 +59,11 @@ def unzip_file_if_destination_not_exists(file_path: str, extract_to_base_dir: st
         zip_ref.extractall(destination_dir)
 
     return destination_dir
+
+
+def get_directory_name_for_zip_file(file_path: str):
+    file_name = os.path.basename(file_path)
+    return file_name.replace('.', '_')
 
 
 def list_files_in_directory(dir_path: str, file_mask: str = "*") -> list[str]:

@@ -1,6 +1,7 @@
 from datetime import timedelta
 from airflow.decorators import dag
 from airflow.providers.postgres.operators.postgres import PostgresOperator
+from airflow.operators.bash import BashOperator
 from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 
 import pendulum
@@ -57,7 +58,7 @@ def pipeline_dag():
 
     local_zip_file_paths = synchronize_file_task\
         .override(trigger_rule="none_failed_min_one_success") \
-        .partial(base_url=bucket_url, local_dir=zip_local_dir)\
+        .partial(base_url=bucket_url, local_dir=zip_local_dir, extract_to_base_dir=extracted_local_dir)\
         .expand(file_name=zip_files)
     print_list_task.override(task_id="print_local_zip_file_paths",)(local_zip_file_paths)
 
@@ -103,6 +104,12 @@ def pipeline_dag():
         trigger_rule="all_done"
     )
 
+    delete_zip_task = BashOperator(
+        task_id='delete_zip_task',
+        bash_command=f'rm -rf {zip_local_dir}/*.zip',
+        trigger_rule="all_done"
+    )
+
     create_stage_table_task >> \
         load_csv_to_postgres_task \
         .override(
@@ -113,7 +120,7 @@ def pipeline_dag():
             target_table=postgres_target_table,
             required_columns=required_columns) \
         .expand(csv_file_path=merged_csv_file_list) >> \
-        trigger_dbt_run
+        [trigger_dbt_run, delete_zip_task]
 
 
 pipeline_dag()
