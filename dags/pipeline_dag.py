@@ -105,8 +105,14 @@ def pipeline_dag():
     )
 
     delete_zip_task = BashOperator(
-        task_id='delete_zip_task',
-        bash_command=f'rm -rf {zip_local_dir}/*.zip',
+        task_id="delete_zip_task",
+        bash_command=f"rm -rf {zip_local_dir}/*.zip",
+        trigger_rule="all_done"
+    )
+
+    delete_extracted_task = BashOperator(
+        task_id="delete_extracted_task",
+        bash_command=f"rm -rf {extracted_local_dir}/*/*",
         trigger_rule="all_done"
     )
 
@@ -120,7 +126,7 @@ def pipeline_dag():
             target_table=postgres_target_table,
             required_columns=required_columns) \
         .expand(csv_file_path=merged_csv_file_list) >> \
-        [trigger_dbt_run, delete_zip_task]
+        [trigger_dbt_run, delete_zip_task, delete_extracted_task]
 
 
 pipeline_dag()
