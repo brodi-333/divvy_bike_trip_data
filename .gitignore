@@ -3,7 +3,6 @@
 .env.local
 dbt_venv
 
-storage/*
 !storage/.gitkeep
 storage/zip/*
 !storage/zip/.gitkeep
