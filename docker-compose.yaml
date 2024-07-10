@@ -383,7 +383,7 @@ services:
           apt-get install -y libpq-dev
           apt-get install -y build-essential python3-dev gcc musl-dev
           python -m venv dbt_venv && source dbt_venv/bin/activate && \
-            pip install --no-cache-dir psycopg2-binary dbt-postgres && deactivate
+            pip install --no-cache-dir psycopg2-binary dbt-postgres && cd dbt && dbt deps && deactivate
           apt-get remove --purge -y build-essential python3-dev gcc musl-dev
           apt-get autoremove -y
           chown -R "${AIRFLOW_UID}:0" dbt_venv
