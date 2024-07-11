@@ -71,12 +71,6 @@ def list_files_in_directory(dir_path: str, file_mask: str = "*") -> list[str]:
     return [str(file) for file in path.glob(file_mask) if file.is_file()]
 
 
-def insert_on_duplicate(table, conn, keys, data_iter):
-    insert_stmt = insert(table.table).values(list(data_iter))
-    on_conflict_do_nothing_stmt = insert_stmt.on_conflict_do_nothing()
-    conn.execute(on_conflict_do_nothing_stmt)
-
-
 def are_required_columns_present(df: pd.DataFrame, required_columns: list[str]) -> bool:
     df_columns = df.columns.tolist()
     missing_columns = [col for col in required_columns if col not in df_columns]
@@ -95,4 +89,4 @@ def load_csv_to_postgres(csv_file_path, postgres_conn_id, target_table, required
 
     postgres_hook = PostgresHook(postgres_conn_id=postgres_conn_id)
     engine = postgres_hook.get_sqlalchemy_engine()
-    df.to_sql(target_table, engine, if_exists='append', index=False, chunksize=4096, method=insert_on_duplicate)
+    df.to_sql(target_table, engine, if_exists='append', index=False, chunksize=4096)

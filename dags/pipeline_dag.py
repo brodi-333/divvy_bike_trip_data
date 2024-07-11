@@ -80,7 +80,7 @@ def pipeline_dag():
         postgres_conn_id=postgres_conn_id,
         sql="""
             CREATE TABLE IF NOT EXISTS raw_rides (
-                ride_id VARCHAR PRIMARY KEY,
+                ride_id VARCHAR,
                 rideable_type VARCHAR,
                 started_at VARCHAR,
                 ended_at VARCHAR,
