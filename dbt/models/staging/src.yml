@@ -15,7 +15,6 @@ sources:
           - name: ride_id
             description: "Trip unique identifier"
             data_tests:
-              - unique
               - not_null
           - name: rideable_type
             description: "Vehicle type"

@@ -1,5 +1,5 @@
 import os
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from cosmos import DbtDag, ProjectConfig, ProfileConfig, ExecutionConfig, RenderConfig
 from cosmos.profiles import PostgresUserPasswordProfileMapping
@@ -7,8 +7,7 @@ from cosmos.constants import TestBehavior
 
 default_args = {
     "owner": "me",
-    "retries": 5,
-    "retry_delay": timedelta(minutes=2)
+    "retries": 0,
 }
 
 profile_config = ProfileConfig(

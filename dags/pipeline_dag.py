@@ -101,7 +101,8 @@ def pipeline_dag():
         task_id="trigger_dbt_run",
         trigger_dag_id="dbt_dag",
         wait_for_completion=True,
-        trigger_rule="all_done"
+        trigger_rule="all_done",
+        retries=0,
     )
 
     delete_zip_task = BashOperator(
