@@ -10,6 +10,8 @@ storage/extracted/*
 !storage/extracted/.gitkeep
 logs/*
 !logs/.gitkeep
+dbt/target/*
+!dbt/target/.gitkeep
 dags/__pycache__
 dags/include/__pycache__
 
