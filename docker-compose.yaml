@@ -124,10 +124,7 @@ x-airflow-common:
 services:
   postgres:
     image: postgres:13
-    environment:
-      POSTGRES_USER: airflow
-      POSTGRES_DB: airflow
-      POSTGRES_PASSWORD: airflow
+    <<: *airflow-postgres-common
     volumes:
       - postgres-db-volume:/var/lib/postgresql/data
       - ./init_scripts/init_dwh:/docker-entrypoint-initdb.d
@@ -135,6 +132,24 @@ services:
       - '127.0.0.222:5432:5432'
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+    restart: "no"
+
+  postgres_dwh:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: datawarehouse
+      POSTGRES_DB: datawarehouse
+      POSTGRES_PASSWORD: datawarehouse
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
+      - ./init_scripts/init_dwh:/docker-entrypoint-initdb.d
+    ports:
+      - '127.0.0.224:5432:5432'
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "dwh"]
       interval: 10s
       retries: 5
       start_period: 5s

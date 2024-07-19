@@ -74,10 +74,10 @@ Login with: airflow / airflow
 [http://127.0.0.223:3030]()  
 Login with: admin@admin.com / Admin333!
 
-#### DBT documentation
+#### DBT documentation (first activate and run dbt_docs_dag)
 [http://127.0.0.224:8080]()
 
-#### Airflow & DWH database
+#### Airflow database
 127.0.0.222:5432  
 User: airflow  
 Db: airflow  
@@ -89,4 +89,8 @@ User: metabase
 Db: metabase  
 Pass: metabase  
 
-
+#### DWH database
+127.0.0.224:5432  
+User: datawarehouse  
+Db: datawarehouse  
+Pass: datawarehouse  

@@ -5,7 +5,7 @@ sources:
     meta:
       external_location: https://divvy-tripdata.s3.amazonaws.com/index.html
     description: Data from S3 bucket, brought in by EL process
-    database: airflow
+    database: datawarehouse
     schema: dwh_staging
     tables:
       - name: raw_rides
