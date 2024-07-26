@@ -149,7 +149,7 @@ services:
     ports:
       - '127.0.0.224:5432:5432'
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "dwh"]
+      test: ["CMD", "pg_isready", "-U", "datawarehouse"]
       interval: 10s
       retries: 5
       start_period: 5s
