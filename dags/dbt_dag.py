@@ -21,7 +21,7 @@ profile_config = ProfileConfig(
 
 render_config = RenderConfig(
     emit_datasets=False,
-    test_behavior=TestBehavior.AFTER_ALL,
+    test_behavior=TestBehavior.AFTER_EACH,
 )
 
 dbt_dag = DbtDag(
