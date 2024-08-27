@@ -35,66 +35,6 @@ x_dim_time_of_day_columns:
         - accepted_values:
             values: ["Night", "Morning", "Afternoon", "Evening"]
 
-x_dim_date_columns:
-  &dim_date_columns
-  columns:
-    - name: id
-      description: "Unique identifier for each day, generated as YYYYMMDD (eg. 20240124)"
-      tests:
-        - not_null
-        - unique
-    - name: date_day
-      description: "The date itself"
-      tests:
-        - not_null
-        - unique
-    - name: year
-      description: "The year part of the date"
-      tests:
-        - not_null
-    - name: month
-      description: "The month part of the date"
-      tests:
-        - not_null
-    - name: day
-      description: "The day part of the date"
-      tests:
-        - not_null
-    - name: quarter
-      description: "The quarter of the year (1 to 4)"
-      tests:
-        - not_null
-        - accepted_values:
-            values: [ 1, 2, 3, 4 ]
-    - name: weekday_iso
-      description: "The ISO day of the week (1 = Monday, 7 = Sunday)"
-      tests:
-        - not_null
-        - accepted_values:
-            values: [ 1, 2, 3, 4, 5, 6, 7 ]
-    - name: weekday_name
-      description: "The name of the day"
-      tests:
-        - not_null
-        - accepted_values:
-            values: [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ]
-    - name: month_name
-      description: "The name of the month"
-      tests:
-        - not_null
-        - accepted_values:
-            values: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ]
-    - name: weekday_indicator
-      description: "Indicates if the date is a Weekday or Weekend"
-      tests:
-        - not_null
-        - accepted_values:
-            values: [ "Weekday", "Weekend" ]
-    - name: week_of_year
-      description: "The ISO week number of the year"
-      tests:
-        - not_null
-
 models:
   - name: fct_rides
     description: "Summary of rides"
@@ -233,10 +173,178 @@ models:
     <<: *dim_time_of_day_columns
   - name: dim_date
     description: "Base date dimension for time-based analysis"
-    <<: *dim_date_columns
+    columns:
+      - name: id
+        description: "Unique identifier for each day, generated as YYYYMMDD (eg. 20240124)"
+        tests:
+          - not_null
+          - unique
+      - name: date_day
+        description: "The date itself"
+        tests:
+          - not_null
+          - unique
+      - name: year
+        description: "The year part of the date"
+        tests:
+          - not_null
+      - name: month
+        description: "The month part of the date"
+        tests:
+          - not_null
+      - name: day
+        description: "The day part of the date"
+        tests:
+          - not_null
+      - name: quarter
+        description: "The quarter of the year (1 to 4)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [ 1, 2, 3, 4 ]
+      - name: weekday_iso
+        description: "The ISO day of the week (1 = Monday, 7 = Sunday)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [ 1, 2, 3, 4, 5, 6, 7 ]
+      - name: weekday_name
+        description: "The name of the day"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ]
+      - name: month_name
+        description: "The name of the month"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ]
+      - name: weekday_indicator
+        description: "Indicates if the date is a Weekday or Weekend"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [ "Weekday", "Weekend" ]
+      - name: week_of_year
+        description: "The ISO week number of the year"
+        tests:
+          - not_null
   - name: dim_started_at_date
     description: "Start date dimension"
-    <<: *dim_date_columns
+    columns:
+      - name: id
+        description: "Unique identifier for each day, generated as YYYYMMDD (eg. 20240124)"
+        tests:
+          - not_null
+          - unique
+      - name: started_at_date_day
+        description: "The date itself"
+        tests:
+          - not_null
+          - unique
+      - name: started_at_year
+        description: "The year part of the date"
+        tests:
+          - not_null
+      - name: started_at_month
+        description: "The month part of the date"
+        tests:
+          - not_null
+      - name: started_at_day
+        description: "The day part of the date"
+        tests:
+          - not_null
+      - name: started_at_quarter
+        description: "The quarter of the year (1 to 4)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [ 1, 2, 3, 4 ]
+      - name: started_at_weekday_iso
+        description: "The ISO day of the week (1 = Monday, 7 = Sunday)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [ 1, 2, 3, 4, 5, 6, 7 ]
+      - name: started_at_weekday_name
+        description: "The name of the day"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ]
+      - name: started_at_month_name
+        description: "The name of the month"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ]
+      - name: started_at_weekday_indicator
+        description: "Indicates if the date is a Weekday or Weekend"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [ "Weekday", "Weekend" ]
+      - name: started_at_week_of_year
+        description: "The ISO week number of the year"
+        tests:
+          - not_null
   - name: dim_ended_at_date
     description: "End date dimension"
-    <<: *dim_date_columns
+    columns:
+      - name: id
+        description: "Unique identifier for each day, generated as YYYYMMDD (eg. 20240124)"
+        tests:
+          - not_null
+          - unique
+      - name: ended_at_date_day
+        description: "The date itself"
+        tests:
+          - not_null
+          - unique
+      - name: ended_at_year
+        description: "The year part of the date"
+        tests:
+          - not_null
+      - name: ended_at_month
+        description: "The month part of the date"
+        tests:
+          - not_null
+      - name: ended_at_day
+        description: "The day part of the date"
+        tests:
+          - not_null
+      - name: ended_at_quarter
+        description: "The quarter of the year (1 to 4)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [ 1, 2, 3, 4 ]
+      - name: ended_at_weekday_iso
+        description: "The ISO day of the week (1 = Monday, 7 = Sunday)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [ 1, 2, 3, 4, 5, 6, 7 ]
+      - name: ended_at_weekday_name
+        description: "The name of the day"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ]
+      - name: ended_at_month_name
+        description: "The name of the month"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ]
+      - name: ended_at_weekday_indicator
+        description: "Indicates if the date is a Weekday or Weekend"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [ "Weekday", "Weekend" ]
+      - name: ended_at_week_of_year
+        description: "The ISO week number of the year"
+        tests:
+          - not_null

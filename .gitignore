@@ -14,4 +14,6 @@ dbt/target/*
 !dbt/target/.gitkeep
 dags/__pycache__
 dags/include/__pycache__
+db/data/*
+!db/data/.gitkeep
 

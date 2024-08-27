@@ -30,7 +30,7 @@ profile_config = ProfileConfig(
     catchup=False,
     tags=["divvy"],
 )
-def generate_dbt_docs():
+def dbt_docs_generate_dag():
     generate_docs = DbtDocsOperator(
         task_id='generate_docs',
         project_dir=f"{os.environ['AIRFLOW_HOME']}/dbt",
@@ -40,4 +40,4 @@ def generate_dbt_docs():
     )
 
 
-generate_dbt_docs()
+dbt_docs_generate_dag()
