@@ -18,23 +18,6 @@ x_dim_station_columns:
       tests:
         - not_null
 
-x_dim_time_of_day_columns:
-  &dim_time_of_day_columns
-  columns:
-    - name: time_of_day_hour
-      description: "The hour of the day, represented as an integer from 0 to 23"
-      tests:
-        - not_null
-        - unique
-        - accepted_values:
-            values: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
-    - name: time_of_day_label
-      description: "Time of day label (Morning, Afternoon, Evening, Night)"
-      tests:
-        - not_null
-        - accepted_values:
-            values: ["Night", "Morning", "Afternoon", "Evening"]
-
 models:
   - name: fct_rides
     description: "Summary of rides"
@@ -164,13 +147,52 @@ models:
               values: ['member', 'casual', 'day_pass']
   - name: dim_time_of_day
     description: "Dimension table that categorizes hour into different time of day periods"
-    <<: *dim_time_of_day_columns
+    columns:
+      - name: time_of_day_hour
+        description: "The hour of the day, represented as an integer from 0 to 23"
+        tests:
+          - not_null
+          - unique
+          - accepted_values:
+              values: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+      - name: time_of_day_label
+        description: "Time of day label (Morning, Afternoon, Evening, Night)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["Night", "Morning", "Afternoon", "Evening"]
   - name: dim_started_at_time_of_day
-    description: "Dimension table that categorizes hour into different time of day periods"
-    <<: *dim_time_of_day_columns
+    description: "Dimension table that categorizes hour of starting time into different time of day periods"
+    columns:
+      - name: started_at_time_of_day_hour
+        description: "The hour of the day, represented as an integer from 0 to 23"
+        tests:
+          - not_null
+          - unique
+          - accepted_values:
+              values: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+      - name: started_at_time_of_day_label
+        description: "Time of day label (Morning, Afternoon, Evening, Night)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["Night", "Morning", "Afternoon", "Evening"]
   - name: dim_ended_at_time_of_day
-    description: "Dimension table that categorizes hour into different time of day periods"
-    <<: *dim_time_of_day_columns
+    description: "Dimension table that categorizes hour of ending time into different time of day periods"
+    columns:
+      - name: ended_at_time_of_day_hour
+        description: "The hour of the day, represented as an integer from 0 to 23"
+        tests:
+          - not_null
+          - unique
+          - accepted_values:
+              values: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+      - name: ended_at_time_of_day_label
+        description: "Time of day label (Morning, Afternoon, Evening, Night)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["Night", "Morning", "Afternoon", "Evening"]
   - name: dim_date
     description: "Base date dimension for time-based analysis"
     columns:
@@ -201,31 +223,31 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: [ 1, 2, 3, 4 ]
+              values: [1, 2, 3, 4]
       - name: weekday_iso
         description: "The ISO day of the week (1 = Monday, 7 = Sunday)"
         tests:
           - not_null
           - accepted_values:
-              values: [ 1, 2, 3, 4, 5, 6, 7 ]
+              values: [1, 2, 3, 4, 5, 6, 7]
       - name: weekday_name
         description: "The name of the day"
         tests:
           - not_null
           - accepted_values:
-              values: [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ]
+              values: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
       - name: month_name
         description: "The name of the month"
         tests:
           - not_null
           - accepted_values:
-              values: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ]
+              values: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
       - name: weekday_indicator
         description: "Indicates if the date is a Weekday or Weekend"
         tests:
           - not_null
           - accepted_values:
-              values: [ "Weekday", "Weekend" ]
+              values: ["Weekday", "Weekend"]
       - name: week_of_year
         description: "The ISO week number of the year"
         tests:
@@ -260,31 +282,31 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: [ 1, 2, 3, 4 ]
+              values: [1, 2, 3, 4]
       - name: started_at_weekday_iso
         description: "The ISO day of the week (1 = Monday, 7 = Sunday)"
         tests:
           - not_null
           - accepted_values:
-              values: [ 1, 2, 3, 4, 5, 6, 7 ]
+              values: [1, 2, 3, 4, 5, 6, 7]
       - name: started_at_weekday_name
         description: "The name of the day"
         tests:
           - not_null
           - accepted_values:
-              values: [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ]
+              values: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
       - name: started_at_month_name
         description: "The name of the month"
         tests:
           - not_null
           - accepted_values:
-              values: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ]
+              values: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
       - name: started_at_weekday_indicator
         description: "Indicates if the date is a Weekday or Weekend"
         tests:
           - not_null
           - accepted_values:
-              values: [ "Weekday", "Weekend" ]
+              values: ["Weekday", "Weekend"]
       - name: started_at_week_of_year
         description: "The ISO week number of the year"
         tests:
@@ -319,31 +341,31 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: [ 1, 2, 3, 4 ]
+              values: [1, 2, 3, 4]
       - name: ended_at_weekday_iso
         description: "The ISO day of the week (1 = Monday, 7 = Sunday)"
         tests:
           - not_null
           - accepted_values:
-              values: [ 1, 2, 3, 4, 5, 6, 7 ]
+              values: [1, 2, 3, 4, 5, 6, 7]
       - name: ended_at_weekday_name
         description: "The name of the day"
         tests:
           - not_null
           - accepted_values:
-              values: [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ]
+              values: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
       - name: ended_at_month_name
         description: "The name of the month"
         tests:
           - not_null
           - accepted_values:
-              values: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ]
+              values: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
       - name: ended_at_weekday_indicator
         description: "Indicates if the date is a Weekday or Weekend"
         tests:
           - not_null
           - accepted_values:
-              values: [ "Weekday", "Weekend" ]
+              values: ["Weekday", "Weekend"]
       - name: ended_at_week_of_year
         description: "The ISO week number of the year"
         tests:

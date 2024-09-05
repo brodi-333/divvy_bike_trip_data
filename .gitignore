@@ -2,6 +2,7 @@
 .idea
 .env.local
 dbt_venv
+airflow.cfg
 
 !storage/.gitkeep
 storage/zip/*
