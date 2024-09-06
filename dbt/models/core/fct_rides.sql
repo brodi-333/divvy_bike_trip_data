@@ -53,15 +53,15 @@ ended_at_times AS (
 start_stations AS (
     SELECT
         station_pk,
-        id,
-        name
+        start_station_id,
+        start_station_name
     FROM {{ ref('dim_start_station') }}
 ),
 end_stations AS (
     SELECT
         station_pk,
-        id,
-        name
+        end_station_id,
+        end_station_name
     FROM {{ ref('dim_end_station') }}
 ),
 rent_types AS (
@@ -101,9 +101,9 @@ LEFT JOIN started_at_times started_at_time_d
 LEFT JOIN ended_at_times ended_at_time_d
     ON r.ended_at_hour = ended_at_time_d.ended_at_time_of_day_hour
 LEFT JOIN start_stations ss
-    ON r.start_station_id = ss.id
+    ON r.start_station_id = ss.start_station_id
 LEFT JOIN end_stations es
-    ON r.end_station_id = es.id
+    ON r.end_station_id = es.end_station_id
 LEFT JOIN rent_types ret
     ON r.member_casual = ret.name
 WHERE r.ended_at > r.started_at

@@ -1,23 +1,5 @@
 version: 2
 
-x_dim_station_columns:
-  &dim_station_columns
-  columns:
-    - name: station_pk
-      description: "Station's surrogate key"
-      tests:
-        - not_null
-        - unique
-    - name: id
-      description: "Natural key of station"
-      tests:
-        - not_null
-        - unique
-    - name: name
-      description: "Name of station"
-      tests:
-        - not_null
-
 models:
   - name: fct_rides
     description: "Summary of rides"
@@ -53,15 +35,15 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('dim_time_of_day')
-              field: time_of_day_hour
+              to: ref('dim_started_at_time_of_day')
+              field: started_at_time_of_day_hour
       - name: ended_at_time_of_day_fk
         description: "Foreign key to the time of day dimension representing end time of ride"
         tests:
           - not_null
           - relationships:
-              to: ref('dim_time_of_day')
-              field: time_of_day_hour
+              to: ref('dim_ended_at_time_of_day')
+              field: ended_at_time_of_day_hour
       - name: started_at_datetime
         description: "Start date/time of trip"
         tests:
@@ -109,15 +91,57 @@ models:
               field: id
   - name: dim_station
     description: "Base stations dimension table"
-    <<: *dim_station_columns
+    columns:
+      - name: station_pk
+        description: "Station's surrogate key"
+        tests:
+          - not_null
+          - unique
+      - name: id
+        description: "Natural key of station"
+        tests:
+          - not_null
+          - unique
+      - name: name
+        description: "Name of station"
+        tests:
+          - not_null
 
   - name: dim_start_station
     description: "Start stations dimension table"
-    <<: *dim_station_columns
+    columns:
+      - name: station_pk
+        description: "Station's surrogate key"
+        tests:
+          - not_null
+          - unique
+      - name: start_station_id
+        description: "Natural key of station"
+        tests:
+          - not_null
+          - unique
+      - name: start_station_name
+        description: "Name of station"
+        tests:
+          - not_null
 
   - name: dim_end_station
     description: "End stations dimension table"
-    <<: *dim_station_columns
+    columns:
+      - name: station_pk
+        description: "Station's surrogate key"
+        tests:
+          - not_null
+          - unique
+      - name: end_station_id
+        description: "Natural key of station"
+        tests:
+          - not_null
+          - unique
+      - name: end_station_name
+        description: "Name of station"
+        tests:
+          - not_null
 
   - name: dim_rideable_type
     description: "Rideable types dimension table"
