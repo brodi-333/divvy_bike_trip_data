@@ -40,28 +40,28 @@ ended_at_dates AS (
 ),
 started_at_times AS (
     SELECT
-        time_of_day_hour,
-        time_of_day_label
+        started_at_time_of_day_hour,
+        started_at_time_of_day_label
     FROM {{ ref('dim_started_at_time_of_day') }}
 ),
 ended_at_times AS (
     SELECT
-        time_of_day_hour,
-        time_of_day_label
+        ended_at_time_of_day_hour,
+        ended_at_time_of_day_label
     FROM {{ ref('dim_ended_at_time_of_day') }}
 ),
 start_stations AS (
     SELECT
         station_pk,
-        id,
-        name
+        start_station_id,
+        start_station_name
     FROM {{ ref('dim_start_station') }}
 ),
 end_stations AS (
     SELECT
         station_pk,
-        id,
-        name
+        end_station_id,
+        end_station_name
     FROM {{ ref('dim_end_station') }}
 ),
 rent_types AS (
@@ -76,8 +76,8 @@ SELECT
     rt.id AS rideable_type_fk,
     started_at_date_d.id AS started_at_date_fk,
     ended_at_date_d.id AS ended_at_date_fk,
-    started_at_time_d.time_of_day_hour AS started_at_time_of_day_fk,
-    ended_at_time_d.time_of_day_hour AS ended_at_time_of_day_fk,
+    started_at_time_d.started_at_time_of_day_hour AS started_at_time_of_day_fk,
+    ended_at_time_d.ended_at_time_of_day_hour AS ended_at_time_of_day_fk,
     r.started_at AS started_at_datetime,
     r.ended_at AS ended_at_datetime,
     {{ datediff("r.started_at", "r.ended_at", "second") }} AS duration_in_seconds,
@@ -97,13 +97,13 @@ LEFT JOIN started_at_dates started_at_date_d
 LEFT JOIN ended_at_dates ended_at_date_d
     ON r.ended_at_date = ended_at_date_d.id
 LEFT JOIN started_at_times started_at_time_d
-    ON r.started_at_hour = started_at_time_d.time_of_day_hour
+    ON r.started_at_hour = started_at_time_d.started_at_time_of_day_hour
 LEFT JOIN ended_at_times ended_at_time_d
-    ON r.ended_at_hour = ended_at_time_d.time_of_day_hour
+    ON r.ended_at_hour = ended_at_time_d.ended_at_time_of_day_hour
 LEFT JOIN start_stations ss
-    ON r.start_station_id = ss.id
+    ON r.start_station_id = ss.start_station_id
 LEFT JOIN end_stations es
-    ON r.end_station_id = es.id
+    ON r.end_station_id = es.end_station_id
 LEFT JOIN rent_types ret
     ON r.member_casual = ret.name
 WHERE r.ended_at > r.started_at

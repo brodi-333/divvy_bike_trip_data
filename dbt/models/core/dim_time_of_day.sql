@@ -20,6 +20,5 @@ time_labels AS (
 SELECT
     time_of_day_hour,
     time_of_day_label
-
 FROM
     time_labels
