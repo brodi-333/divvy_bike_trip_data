@@ -1,3 +1,17 @@
+{{ config(
+  post_hook=[
+      "CREATE INDEX IF NOT EXISTS fct_rides_started_at_year_idx ON {{ this }} (started_at_year)",
+      "CREATE INDEX IF NOT EXISTS fct_rides_rideable_type_fk_idx ON {{ this }} (rideable_type_fk)",
+      "CREATE INDEX IF NOT EXISTS fct_rides_started_at_date_fk_idx ON {{ this }} (started_at_date_fk)",
+      "CREATE INDEX IF NOT EXISTS fct_rides_ended_at_date_fk_idx ON {{ this }} (ended_at_date_fk)",
+      "CREATE INDEX IF NOT EXISTS fct_rides_started_at_time_of_day_fk_idx ON {{ this }} (started_at_time_of_day_fk)",
+      "CREATE INDEX IF NOT EXISTS fct_rides_ended_at_time_of_day_fk_idx ON {{ this }} (ended_at_time_of_day_fk)",
+      "CREATE INDEX IF NOT EXISTS fct_rides_start_station_fk_idx ON {{ this }} (start_station_fk)",
+      "CREATE INDEX IF NOT EXISTS fct_rides_end_station_fk_idx ON {{ this }} (end_station_fk)",
+      "CREATE INDEX IF NOT EXISTS fct_rides_rent_type_fk_idx ON {{ this }} (rent_type_fk)"
+  ]
+) }}
+
 WITH rides AS (
     SELECT
         ride_id,
@@ -10,6 +24,7 @@ WITH rides AS (
             + EXTRACT(DAY FROM ended_at))::INTEGER AS ended_at_date,
         EXTRACT(HOUR FROM started_at)::INTEGER AS started_at_hour,
         EXTRACT(HOUR FROM ended_at)::INTEGER AS ended_at_hour,
+        EXTRACT(YEAR FROM started_at)::INTEGER AS started_at_year,
         DATE_TRUNC('second', started_at) AS started_at,
         DATE_TRUNC('second', ended_at) AS ended_at,
         start_station_id,
@@ -80,6 +95,7 @@ SELECT
     ended_at_time_d.ended_at_time_of_day_hour AS ended_at_time_of_day_fk,
     r.started_at AS started_at_datetime,
     r.ended_at AS ended_at_datetime,
+    r.started_at_year AS started_at_year,
     {{ datediff("r.started_at", "r.ended_at", "second") }} AS duration_in_seconds,
     COALESCE(ss.station_pk, '-1') AS start_station_fk,
     COALESCE(es.station_pk, '-1') AS end_station_fk,

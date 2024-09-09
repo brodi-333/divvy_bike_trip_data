@@ -52,6 +52,10 @@ models:
         description: "End date/time of trip"
         tests:
           - not_null
+      - name: started_at_year
+        description: "Start of trip - year"
+        tests:
+          - not_null
       - name: duration_in_seconds
         description: "Duration of trip in seconds"
         tests:
