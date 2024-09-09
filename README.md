@@ -70,11 +70,13 @@ AIRFLOW_IMAGE_NAME=airflow_divvy:latest
 [http://127.0.0.222:8080]()  
 Login with: airflow / airflow
 
+**After login to panel activate dbt_dag and pipeline_dag on DAGs list.**
+
 #### Metabase:  
 [http://127.0.0.223:3030]()  
 Login with: admin@admin.com / Admin333!
 
-#### DBT documentation (first activate and run dbt_docs_dag)
+#### DBT documentation (first activate and run dbt_docs_generate_dag)
 [http://127.0.0.224:8080]()
 
 #### Airflow database
