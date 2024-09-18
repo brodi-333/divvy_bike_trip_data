@@ -40,7 +40,7 @@ WITH rides AS (
 rideable_types AS (
     SELECT
         id,
-        name
+        rideable_type_name
     FROM {{ ref('dim_rideable_type') }}
 ),
 started_at_dates AS (
@@ -82,7 +82,7 @@ end_stations AS (
 rent_types AS (
     SELECT
         id,
-        name
+        rent_type_name
     FROM {{ ref('dim_rent_type') }}
 )
 
@@ -107,7 +107,7 @@ SELECT
 FROM
     rides r
 LEFT JOIN rideable_types rt
-    ON r.rideable_type = rt.name
+    ON r.rideable_type = rt.rideable_type_name
 LEFT JOIN started_at_dates started_at_date_d
     ON r.started_at_date = started_at_date_d.id
 LEFT JOIN ended_at_dates ended_at_date_d
@@ -121,5 +121,5 @@ LEFT JOIN start_stations ss
 LEFT JOIN end_stations es
     ON r.end_station_id = es.end_station_id
 LEFT JOIN rent_types ret
-    ON r.member_casual = ret.name
+    ON r.member_casual = ret.rent_type_name
 WHERE r.ended_at > r.started_at

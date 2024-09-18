@@ -1,7 +1,7 @@
 WITH rent_types AS (
     SELECT
         ROW_NUMBER() OVER (ORDER BY member_casual) AS id,
-        member_casual AS name
+        member_casual AS rent_type_name
     FROM
         {{ ref('stg_rides') }}
     GROUP BY member_casual
